@@ -88,7 +88,7 @@ const getkakaocert = async (req, res, next) => {
       PayLoad : 'memo Info',
   
     };
-  if(data.data()['certificated']==true){
+  if(data.data()['certificated']==false){
     kakaocertService.requestVerifyAuth(clientCode, requestVerifyAuth,
       function(result){
           res.render('requestVerifyAuth', {path: req.path, receiptId: result.receiptId});
