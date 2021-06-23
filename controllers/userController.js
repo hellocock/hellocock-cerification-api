@@ -1,7 +1,7 @@
 'use strict';
 
 const firebase = require('../db');
-const Student = require('../models/user');
+const User = require('../models/user');
 const firestore = firebase.firestore();
 var kakaocert = require('kakaocert');
 
@@ -32,7 +32,7 @@ const getkakaocert = async (req, res, next) => {
         const user = await firestore.collection('user').doc(id);
         const data = await user.get();
         if(!data.exists) {
-            res.status(404).send('Student with the given ID not found');
+            res.status(404).send('User not found');
         }else {
             // kakaoCert 이용기관코드, kakaoCert 파트너 사이트에서 확인
     var clientCode = '021040000007';
@@ -41,7 +41,7 @@ const getkakaocert = async (req, res, next) => {
     var requestVerifyAuth = {
   
       // 고객센터 전화번호, 카카오톡 인증메시지 중 "고객센터" 항목에 표시
-      CallCenterNum : '1600-9999',
+      CallCenterNum : '070-8098-2267',
   
       // 인증요청 만료시간(초), 최대값 : 1000  인증요청 만료시간(초) 내에 미인증시, 만료 상태로 처리됨 (권장 : 300)
       Expires_in : 300,
@@ -91,14 +91,14 @@ const getkakaocert = async (req, res, next) => {
   if(data.data()['certificated']==false){
     kakaocertService.requestVerifyAuth(clientCode, requestVerifyAuth,
       function(result){
-          res.render('requestVerifyAuth', {path: req.path, receiptId: result.receiptId});
+          res.send({path: req.path, receiptId: result.receiptId});
       }, function(error){
-          res.render('requestVerifyAuth', {path: req.path, code: error.code, message: error.message});
+          res.send({path: req.path, code: error.code, message: error.message});
       });
     
         }
         else{
-            res.send('인증이 이미 완료');
+            res.send('이미 인증이 완료되었습니다.');
     }  
    
     } 
@@ -107,7 +107,28 @@ const getkakaocert = async (req, res, next) => {
     }
 }
 
+/*
+* 본인인증 요청시 반환된 접수아이디를 통해 서명 상태를 확인합니다.
+*/
+const getverifyauthstate = async (req, res, next) =>{
+
+    // Kakaocert 이용기관코드, Kakaocert 파트너 사이트에서 확인
+    var clientCode = '020040000001';
+  
+    // 본인인증 요청시 반환받은 접수아이디
+    var receiptId = '020090914003300001';
+  
+    kakaocertService.getVerifyAuthState(clientCode, receiptId,
+      function(response){
+          res.send( {path: req.path, result: response});
+      }, function(error){
+          res.send( {path: req.path, code: error.code, message: error.message});
+      });
+  
+  };
+
 
 module.exports = {
-    getkakaocert
+    getkakaocert,
+    getverifyauthstate
 }
