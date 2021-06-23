@@ -7,7 +7,7 @@ const {
 const router = express.Router();
 
 router.get('/user/:id',  getkakaocert);
-router.get('/user/verify/:id',  getverifyauthstate);
+router.post('/user/verify/:id',  getverifyauthstate);
 
 module.exports = {
     routes: router

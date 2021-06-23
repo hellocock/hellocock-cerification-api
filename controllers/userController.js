@@ -112,11 +112,12 @@ const getkakaocert = async (req, res, next) => {
 */
 const getverifyauthstate = async (req, res, next) =>{
 
+    var data = req.body;
     // Kakaocert 이용기관코드, Kakaocert 파트너 사이트에서 확인
     var clientCode = '020040000001';
   
     // 본인인증 요청시 반환받은 접수아이디
-    var receiptId = '020090914003300001';
+    var receiptId = data.receiptId;
   
     kakaocertService.getVerifyAuthState(clientCode, receiptId,
       function(response){
