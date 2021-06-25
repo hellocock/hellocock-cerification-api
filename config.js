@@ -14,7 +14,9 @@ const {
     PROJECT_ID,
     STORAGE_BUCKET,
     MESSAGING_SENDER_ID,
-    APP_ID
+    APP_ID,
+    LINK_ID,
+    SECRET_KEY
 } = process.env;
 
 assert(PORT, 'PORT is required');
@@ -32,5 +34,11 @@ module.exports = {
         storageBucket: STORAGE_BUCKET,
         messagingSenderId: MESSAGING_SENDER_ID,
         appId: APP_ID
+    },
+    kakaocertConfig :{
+        LinkID : LINK_ID,
+        SecretKey : SECRET_KEY
+
     }
+   
 }

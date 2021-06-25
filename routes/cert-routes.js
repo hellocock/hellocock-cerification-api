@@ -2,7 +2,7 @@ const express = require('express');
 const {
        getkakaocert,
        getverifyauthstate,
-      } = require('../controllers/userController');
+      } = require('../controllers/certController');
 
 const router = express.Router();
 

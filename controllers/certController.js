@@ -4,11 +4,13 @@ const firebase = require('../db');
 const User = require('../models/user');
 const firestore = firebase.firestore();
 var kakaocert = require('kakaocert');
+const config = require('../config');
+
 
 kakaocert.config( {
     // 연동신청하여 발급받은 링크아이디, 비밀키
-    LinkID :'HELLOCOCK_KC',
-    SecretKey : 'xiT9O2wtV5htOHImgFIpkV/lSuIj756OYRUdRnhSOKE=',
+    LinkID : config.kakaocertConfig.LinkID,
+    SecretKey : config.kakaocertConfig.SecretKey,
 
     // 인증토큰 IP제한기능 사용여부, 권장(true)
     IPRestrictOnOff: true,
@@ -29,11 +31,13 @@ const getkakaocert = async (req, res, next) => {
     try {
    
         const id = req.params.id;
-        const user = await firestore.collection('user').doc(id);
-        const data = await user.get();
+        const doc = await firestore.collection('user').doc(id);
+        const data = await doc.get();
+       
         if(!data.exists) {
             res.status(404).send('User not found');
         }else {
+            const user = new User(id,data.data()['name'],data.data()['phone'],data.data()['birth']);
             // kakaoCert 이용기관코드, kakaoCert 파트너 사이트에서 확인
     var clientCode = '021040000007';
   
@@ -47,13 +51,13 @@ const getkakaocert = async (req, res, next) => {
       Expires_in : 300,
   
       // 수신자 생년월일, 형식 : YYYYMMDD
-      ReceiverBirthDay : data.data()['birth'],
+      ReceiverBirthDay : user.birth,
   
       // 수신자 휴대폰번호
-      ReceiverHP : data.data()['phone'],
+      ReceiverHP : user.phone,
   
       // 수신자 성명
-      ReceiverName : data.data()['name'],
+      ReceiverName : user.name,
   
       // 별칭코드, 이용기관이 생성한 별칭코드 (파트너 사이트에서 확인가능)
       SubClientID : '021050000003',
@@ -88,7 +92,9 @@ const getkakaocert = async (req, res, next) => {
       PayLoad : 'memo Info',
   
     };
+    
   if(data.data()['certificated']==false){
+   
     kakaocertService.requestVerifyAuth(clientCode, requestVerifyAuth,
       function(result){
           res.send({path: req.path, receiptId: result.receiptId});
