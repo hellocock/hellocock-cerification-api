@@ -63,10 +63,10 @@ const getkakaocert = async (req, res, next) => {
       SubClientID : '021050000003',
   
       // 인증요청 메시지 부가내용, 카카오톡 인증메시지 중 상단에 표시
-      TMSMessage : '헬로콕 본인인증 요청',
+      TMSMessage : '헬로콕 성인인증 요청',
   
       // 인증요청 메시지 제목, 카카오톡 인증메시지 중 "요청구분" 항목에 표시
-      TMSTitle : '본인인증 요청',
+      TMSTitle : '성인인증 요청',
   
       /*
       * 인증서 발급유형 선택
