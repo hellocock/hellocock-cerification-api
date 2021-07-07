@@ -4,4 +4,5 @@
 </br>
 
 ### API 소개
-![image](https://user-images.githubusercontent.com/46320067/124759817-0dbe4480-df6b-11eb-878f-b2d3a7944f6b.png)
+![image](https://user-images.githubusercontent.com/46320067/124760073-5413a380-df6b-11eb-90e2-35ad4692c3ad.png)
+
